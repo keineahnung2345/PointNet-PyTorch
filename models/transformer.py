@@ -16,6 +16,13 @@ class Transformer(nn.Module):
 	def __init__(self, num_points=2000, K=3):
 		# Call the super constructor
 		super(Transformer, self).__init__()
+        
+		if torch.cuda.is_available():  
+			dev = "cuda:0"
+		else:  
+			dev = "cpu"  
+    
+		device = torch.device(dev)
 
 		# Number of dimensions of the data
 		self.K = K
@@ -26,7 +33,7 @@ class Transformer(nn.Module):
 		# Initialize identity matrix on the GPU (do this here so it only 
 		# happens once)
 		self.identity = grad.Variable(
-			torch.eye(self.K).double().view(-1).cuda())
+			torch.eye(self.K).double().view(-1).to(device))
 
 		# First embedding block
 		self.block1 =nn.Sequential(

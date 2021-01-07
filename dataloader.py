@@ -28,7 +28,8 @@ class ModelNet40(torch.utils.data.Dataset):
 		path, label = self.input_pairs[idx]
 
 		# Parse the vertices from the file
-		vertices = self.off_vertex_parser(path)
+# 		vertices = self.off_vertex_parser(path)
+		vertices = self.point_cloud_parser(path)
 		
 		if not self.test:
 			vertices = self.augment_data(vertices)
@@ -48,9 +49,10 @@ class ModelNet40(torch.utils.data.Dataset):
 
 		for idx, obj in enumerate(gt_key):
 			if test:
-				path_to_files = osp.join(dataset_root_path, obj, 'test')
+				path_to_files = osp.join(dataset_root_path, obj)#, 'test')
 			else:
 				path_to_files = osp.join(dataset_root_path, obj, 'train')
+			if not os.path.isdir(path_to_files): continue
 			files = os.listdir(path_to_files)
 			filepaths = [(osp.join(path_to_files, file), idx) 
 						for file in files]
@@ -67,7 +69,7 @@ class ModelNet40(torch.utils.data.Dataset):
 		vertices = np.matmul(Ry, vertices)
 
 		# Add Gaussian noise with standard deviation of 0.2
-		vertices += np.random.normal(scale=0.02, size(vertices.shape))
+		vertices += np.random.normal(scale=0.02, size=vertices.shape)
 
 		return vertices
 
@@ -91,3 +93,11 @@ class ModelNet40(torch.utils.data.Dataset):
 		
 		# Return the vertices as a 3 x N numpy array
 		return np.array(vertex_list).transpose(1,0)
+    
+	def point_cloud_parser(self, path_to_file):
+		cloud = np.loadtxt(
+			os.path.join(path_to_file), delimiter=',')
+		#discard normals
+		cloud = cloud[:, :3]
+		return cloud.transpose(1,0)
+

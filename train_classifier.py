@@ -61,10 +61,10 @@ def main():
 	# Whether to save a snapshot
 	save = False
 
-	print 'Starting training...\n'
+	print('Starting training...\n')
 
 	# Run through all epochs
-	for ep in xrange(num_epochs):
+	for ep in range(num_epochs):
 
 		if ep % snapshot == 0 and ep != 0:
 			save = True
@@ -126,23 +126,23 @@ def main():
 
 			if (i+1) % printout == 0:
 				# Print progress
-				print 'Epoch {}/{}'.format(ep+1, num_epochs)
-				print 'Batches {}-{}/{} (BS = {})'.format(i-printout+1, i,
-					len(model_net) / batch_size, batch_size)
-				print 'PointClouds Seen: {}'.format(
-					ep * len(model_net) + (i+1) * batch_size)
+				print('Epoch {}/{}'.format(ep+1, num_epochs))
+				print('Batches {}-{}/{} (BS = {})'.format(i-printout+1, i,
+					len(model_net) / batch_size, batch_size))
+				print('PointClouds Seen: {}'.format(
+					ep * len(model_net) + (i+1) * batch_size))
 				
 				# Print network speed
-				print '{:16}[ {:12}{:12} ]'.format('Total Time', 'Forward', 'Backprop')
-				print '  {:<14.3f}[   {:<10.3f}  {:<10.3f} ]' \
-					.format(network_time, forward_time, backprop_time)
+				print('{:16}[ {:12}{:12} ]'.format('Total Time', 'Forward', 'Backprop'))
+				print('  {:<14.3f}[   {:<10.3f}  {:<10.3f} ]' \
+					.format(network_time, forward_time, backprop_time))
 
 				# Print current error
-				print '{:16}[ {:12}{:12} ]'.format('Total Error', 
-					'Pred Error', 'Reg Error')
-				print '  {:<14.4f}[   {:<10.4f}  {:<10.4f} ]'.format(
-					total_error.data[0], pred_error.data[0], reg_error.data[0])
-				print '\n'
+				print('{:16}[ {:12}{:12} ]'.format('Total Error', 
+					'Pred Error', 'Reg Error'))
+				print('  {:<14.4f}[   {:<10.4f}  {:<10.4f} ]'.format(
+					total_error.data[0], pred_error.data[0], reg_error.data[0]))
+				print('\n')
 
 				# Reset timers
 				forward_time = 0.
@@ -150,7 +150,7 @@ def main():
 				network_time = 0.
 
 			if save:
-				print 'Saving model snapshot...'
+				print('Saving model snapshot...')
 				save_model(classifier, snapshot_dir, ep)
 				save = False
 
